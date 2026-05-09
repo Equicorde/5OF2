@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5OF2 - ROOT ACCESS</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #050000;
+            background-image: url('bg.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: #ccc;
+            font-family: 'VT323', monospace;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: background-image 0.5s ease;
+        }
+
+        body.vip-active {
+            background-image: url('vip-bg.png');
+        }
+
+        body.active-5of2 {
+            background-image: url('5of2-bg.jpg');
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(10, 10, 10, 0.2); /* Reduced opacity to show the new background clearly */
+            z-index: 0;
+            transition: background-color 0.5s ease;
+        }
+
+        body.vip-active::before {
+            background: rgba(10, 10, 10, 0.75); /* Darker/greyer overlay for VIP */
+        }
+
+        .view {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .view.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .guts-tattoo-container {
+            width: 250px;
+            height: 250px;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 5;
+            pointer-events: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .guts-tattoo {
+            width: 100%;
+            opacity: 0.85; 
+            filter: drop-shadow(0 0 10px rgba(200,200,200,0.5));
+            animation: rotateSlow 20s linear infinite;
+        }
+
+        .blood-drop {
+            position: absolute;
+            top: 65%;
+            width: 4px;
+            background: linear-gradient(to bottom, rgba(150,0,0,0.8), #f00, transparent);
+            border-radius: 5px;
+            animation: dropBlood 3s infinite ease-in;
+            opacity: 0;
+            filter: drop-shadow(0 0 5px #f00);
+        }
+
+        .blood-drop:nth-child(2) { left: 45%; animation-delay: 0.5s; animation-duration: 2.5s; height: 60px; }
+        .blood-drop:nth-child(3) { left: 52%; animation-delay: 1.5s; animation-duration: 3.2s; height: 90px; }
+        .blood-drop:nth-child(4) { left: 58%; animation-delay: 0.2s; animation-duration: 2.8s; height: 50px; }
+
+        @keyframes dropBlood {
+            0% { transform: translateY(0) scaleY(0); opacity: 0.8; }
+            40% { transform: translateY(40px) scaleY(1); opacity: 1; }
+            100% { transform: translateY(200px) scaleY(0); opacity: 0; }
+        }
+
+        .glitch-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .glitch {
+            font-size: 8rem;
+            font-weight: bold;
+            color: #ccc;
+            text-shadow: 0 0 15px rgba(200, 200, 200, 0.8), 0 0 30px rgba(200, 200, 200, 0.5);
+            position: relative;
+            margin: 0;
+            animation: pulse 2s infinite;
+            letter-spacing: 0.5rem;
+            text-align: center;
+        }
+
+        .glitch::before, .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+        }
+
+        .glitch::before {
+            left: 3px;
+            text-shadow: -2px 0 #fff;
+            clip: rect(24px, 550px, 90px, 0);
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
+        }
+
+        .glitch::after {
+            left: -3px;
+            text-shadow: -2px 0 #666;
+            clip: rect(85px, 550px, 140px, 0);
+            animation: glitch-anim 2.5s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% { clip: rect(13px, 9999px, 86px, 0); }
+            5% { clip: rect(89px, 9999px, 23px, 0); }
+            10% { clip: rect(56px, 9999px, 4px, 0); }
+            15% { clip: rect(2px, 9999px, 78px, 0); }
+            20% { clip: rect(65px, 9999px, 11px, 0); }
+            25% { clip: rect(34px, 9999px, 90px, 0); }
+            30% { clip: rect(99px, 9999px, 44px, 0); }
+            35% { clip: rect(12px, 9999px, 67px, 0); }
+            40% { clip: rect(4px, 9999px, 91px, 0); }
+            45% { clip: rect(76px, 9999px, 12px, 0); }
+            50% { clip: rect(23px, 9999px, 88px, 0); }
+            55% { clip: rect(90px, 9999px, 34px, 0); }
+            60% { clip: rect(78px, 9999px, 46px, 0); }
+            65% { clip: rect(11px, 9999px, 99px, 0); }
+            70% { clip: rect(55px, 9999px, 22px, 0); }
+            75% { clip: rect(88px, 9999px, 1px, 0); }
+            80% { clip: rect(110px, 9999px, 14px, 0); }
+            85% { clip: rect(2px, 9999px, 87px, 0); }
+            90% { clip: rect(44px, 9999px, 33px, 0); }
+            95% { clip: rect(77px, 9999px, 55px, 0); }
+            100% { clip: rect(54px, 9999px, 78px, 0); }
+        }
+
+        @keyframes glitch-anim-2 {
+            0% { clip: rect(65px, 9999px, 100px, 0); }
+            10% { clip: rect(12px, 9999px, 45px, 0); }
+            20% { clip: rect(3px, 9999px, 20px, 0); }
+            30% { clip: rect(88px, 9999px, 12px, 0); }
+            40% { clip: rect(88px, 9999px, 54px, 0); }
+            50% { clip: rect(22px, 9999px, 99px, 0); }
+            60% { clip: rect(14px, 9999px, 77px, 0); }
+            70% { clip: rect(66px, 9999px, 33px, 0); }
+            80% { clip: rect(45px, 9999px, 11px, 0); }
+            90% { clip: rect(99px, 9999px, 88px, 0); }
+            100% { clip: rect(90px, 9999px, 34px, 0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; text-shadow: 0 0 20px currentcolor, 0 0 40px currentcolor; }
+        }
+
+        .terminal {
+            margin-top: 1rem;
+            font-size: 1.8rem;
+            text-align: left;
+            width: 90vw;
+            max-width: 800px;
+            height: 350px;
+            padding: 10px 30px;
+            animation: terminal-flicker 4s infinite;
+        }
+
+        @keyframes terminal-flicker {
+            0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
+                opacity: 1;
+                filter: brightness(1);
+            }
+            20%, 21.999%, 63%, 63.999%, 65%, 69.999% {
+                opacity: 0.8;
+                filter: brightness(0.6);
+            }
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 12px;
+            height: 1.5rem;
+            background-color: #ccc;
+            animation: blink 1s step-end infinite;
+            vertical-align: text-bottom;
+            margin-left: 5px;
+            box-shadow: 0 0 5px #ccc;
+        }
+
+        body.vip-active .cursor {
+            background-color: #ccc;
+            box-shadow: 0 0 5px #ccc;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* CRT Scanlines */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(
+                to bottom,
+                rgba(255,255,255,0),
+                rgba(255,255,255,0) 50%,
+                rgba(0,0,0,0.3) 50%,
+                rgba(0,0,0,0.3)
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        /* CRT Vignette */
+        .vignette {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle, rgba(0,0,0,0) 50%, rgba(20,0,0,0.95) 100%);
+            pointer-events: none;
+            z-index: 49;
+            transition: background 0.5s ease;
+        }
+
+        body.vip-active .vignette {
+            background: radial-gradient(circle, rgba(0,0,0,0) 50%, rgba(10,10,10,0.95) 100%);
+        }
+        
+        .fsociety-mask {
+            font-size: 1.2rem;
+            line-height: 1.2;
+            color: #ccc;
+            opacity: 0.08;
+            position: fixed;
+            z-index: 1;
+            pointer-events: none;
+            white-space: pre;
+            text-align: center;
+        }
+
+        body.vip-active .fsociety-mask {
+            color: #ccc;
+            opacity: 0.05;
+        }
+
+        .sys-info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 1rem;
+            color: rgba(200, 200, 200, 0.7);
+            text-shadow: 0 0 5px rgba(200, 200, 200, 0.5);
+            animation: pulse 2s infinite;
+            z-index: 10;
+        }
+
+        body.vip-active .sys-info {
+            color: rgba(200, 200, 200, 0.7);
+            text-shadow: 0 0 5px rgba(200, 200, 200, 0.5);
+        }
+
+        .buttons-container {
+            margin-top: 2rem;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        #view-5of2 .buttons-container,
+        #view-vip .buttons-container {
+            position: absolute;
+            left: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            flex-direction: column;
+            margin-top: 0;
+            z-index: 20;
+        }
+
+        /* HACKER BOX STYLES */
+        .vip-boxes-container {
+            position: absolute;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            z-index: 20;
+            width: 320px;
+        }
+
+        .hacker-box {
+            background: rgba(10, 10, 10, 0.7);
+            border: 1px solid #333;
+            padding: 15px;
+            width: 200px;
+            backdrop-filter: blur(5px);
+            position: absolute;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 20;
+            cursor: default;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+            box-sizing: border-box;
+        }
+
+        .vip-boxes-container .hacker-box {
+            position: relative;
+            right: auto;
+            top: auto;
+            transform: none;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .vip-boxes-container .skills-box-vip {
+            grid-column: span 2;
+            cursor: default;
+        }
+
+        .hacker-box:hover {
+            border-color: #ccc;
+            box-shadow: 0 0 15px rgba(200, 200, 200, 0.1);
+        }
+
+        .hacker-box .box-badge {
+            border: 1px solid #555;
+            color: #888;
+            padding: 2px 6px;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        .hacker-box .box-title {
+            color: #fff;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            letter-spacing: 0.05rem;
+        }
+
+        .skills-box-vip .box-title, #view-5of2 .hacker-box .box-title {
+            border-bottom: 1px solid #333;
+            padding-bottom: 8px;
+        }
+
+        .hacker-box .box-sub {
+            color: #888;
+            font-size: 0.9rem;
+            font-family: monospace;
+            margin-top: -5px;
+        }
+
+        .hacker-box .box-content {
+            color: #ddd;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            text-align: left;
+        }
+
+        .hacker-box .box-content p {
+            margin: 6px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s;
+        }
+        
+        .hacker-box .box-content p:hover {
+            color: #ccc;
+        }
+
+        .hacker-box .box-content p::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 4px;
+            background: #555;
+        }
+        
+        .hacker-box:hover .box-content p::before {
+            background: #ccc;
+        }
+
+        .fsociety-btn {
+            background: rgba(20, 20, 20, 0.6);
+            color: #ccc;
+            border: 1px solid #ccc;
+            padding: 12px 25px;
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(200, 200, 200, 0.2) inset;
+            text-transform: uppercase;
+            letter-spacing: 0.1rem;
+            backdrop-filter: blur(2px);
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .fsociety-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; 
+            left: -100%;
+            width: 100%; 
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(200,200,200,0.4), transparent);
+            transition: all 0.5s ease;
+        }
+
+        .fsociety-btn:hover::before {
+            left: 100%;
+        }
+
+        .fsociety-btn:hover {
+            background: rgba(200, 200, 200, 0.2);
+            box-shadow: 0 0 20px rgba(200, 200, 200, 0.6) inset, 0 0 15px rgba(200, 200, 200, 0.6);
+            text-shadow: 0 0 8px #ccc;
+        }
+
+        /* SCARY VIP STYLES - SILVER/GREY */
+        .pentagram-wrapper {
+            width: 250px;
+            height: 250px;
+            margin-bottom: 2rem;
+            animation: rotateSlow 25s linear infinite;
+            filter: drop-shadow(0 0 20px #aaa);
+        }
+
+        @keyframes rotateSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .vip-title {
+            font-size: 6rem;
+            color: #ccc;
+            text-shadow: 0 0 30px #aaa, 0 0 60px #fff;
+            letter-spacing: 1.5rem;
+        }
+        .vip-title::before {
+            text-shadow: -2px 0 #fff;
+        }
+        .vip-title::after {
+            text-shadow: -2px 0 #555;
+        }
+
+        .vip-terminal {
+            color: #ddd;
+            text-shadow: 0 0 5px #ccc;
+            animation: terminal-flicker 2s infinite;
+        }
+
+        .scary-btn {
+            background: rgba(40, 40, 40, 0.8) !important;
+            border-color: #ccc !important;
+            color: #ccc !important;
+            box-shadow: 0 0 20px #888 inset !important;
+            font-size: 1.8rem;
+            padding: 15px 35px;
+        }
+        .scary-btn::before {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+        }
+        .scary-btn:hover {
+            background: rgba(100, 100, 100, 0.8) !important;
+            box-shadow: 0 0 50px #ccc inset, 0 0 30px #aaa !important;
+            text-shadow: 0 0 8px #fff !important;
+        }
+
+        .vip-btn {
+            background: rgba(0,0,0,0.8);
+            border: 1px solid #aaa;
+            color: #ccc;
+            text-shadow: 0 0 15px #ccc;
+            box-shadow: 0 0 20px rgba(200,200,200,0.5) inset;
+        }
+        .vip-btn::before {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+        }
+        .vip-btn:hover {
+            background: #222;
+            box-shadow: 0 0 40px #ccc inset, 0 0 20px #ccc;
+            text-shadow: 0 0 8px #fff;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(0, 0, 0, 0.6);
+            color: #ccc;
+            border: 1px solid #ccc;
+            font-family: 'VT323', monospace;
+            font-size: 1.2rem;
+            padding: 8px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 20;
+        }
+        .back-btn:hover {
+            background: rgba(200,200,200,0.2);
+            box-shadow: 0 0 15px #ccc;
+        }
+
+        body.vip-active .back-btn {
+            color: #ccc;
+            border-color: #ccc;
+        }
+        body.vip-active .back-btn:hover {
+            background: rgba(255,255,255,0.2);
+            box-shadow: 0 0 15px #ccc;
+        }
+
+        /* MODAL STYLES */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(20, 20, 20, 0.95);
+            border: 2px solid #ccc;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 0 60px rgba(200, 200, 200, 0.4) inset, 0 0 40px rgba(200, 200, 200, 0.6);
+            border-radius: 5px;
+            transition: all 0.5s;
+        }
+
+        body.vip-active .modal-content {
+            border-color: #ccc;
+            box-shadow: 0 0 60px rgba(200, 200, 200, 0.4) inset, 0 0 40px rgba(200, 200, 200, 0.6);
+        }
+
+        body.vip-active .modal-content .glitch {
+            color: #ccc;
+            text-shadow: 0 0 15px #ccc, 0 0 30px #aaa;
+        }
+
+        .skills-list {
+            text-align: left;
+            font-size: 1.8rem;
+            line-height: 1.8;
+            margin-top: 30px;
+            border-left: 3px solid #ccc;
+            padding-left: 20px;
+            box-shadow: -10px 0 15px -10px rgba(200,200,200,0.5);
+            transition: all 0.5s;
+        }
+
+        body.vip-active .skills-list {
+            border-left-color: #ccc;
+            box-shadow: -10px 0 15px -10px rgba(200,200,200,0.5);
+            color: #ddd;
+        }
+        
+        .skills-list p {
+            margin: 8px 0;
+            opacity: 0.8;
+            transition: all 0.2s ease;
+            cursor: default;
+        }
+        
+        .skills-list p:hover {
+            color: #fff;
+            text-shadow: 0 0 15px #ccc;
+            transform: translateX(10px);
+            opacity: 1;
+        }
+
+        body.vip-active .skills-list p:hover {
+            text-shadow: 0 0 15px #ccc;
+        }
+        
+        .modal-close-btn {
+            margin-top: 40px;
+            width: 50%;
+        }
+
+        body.vip-active .modal-close-btn {
+            color: #ccc;
+            border-color: #ccc;
+        }
+
+        /* MUSIC PLAYER */
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(10, 10, 10, 0.8);
+            padding: 10px 20px;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(200, 200, 200, 0.3);
+            border-radius: 2px;
+            backdrop-filter: blur(5px);
+        }
+
+        body.vip-active .music-player {
+            border-color: #ccc;
+            box-shadow: 0 0 10px rgba(200, 200, 200, 0.3);
+            background: rgba(20, 20, 20, 0.8);
+        }
+
+        #volume-slider {
+            -webkit-appearance: none;
+            width: 100px;
+            height: 4px;
+            background: #444;
+            outline: none;
+            border-radius: 2px;
+        }
+
+        #volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            background: #ccc;
+            cursor: pointer;
+            border-radius: 50%;
+            box-shadow: 0 0 5px #ccc;
+        }
+
+        body.vip-active #volume-slider {
+            background: #444;
+        }
+        body.vip-active #volume-slider::-webkit-slider-thumb {
+            background: #ccc;
+            box-shadow: 0 0 5px #ccc;
+        }
+
+        body.vip-active #play-pause-btn {
+            color: #ccc;
+            border-color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <audio id="bg-audio" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+    
+    <div class="music-player">
+        <button id="play-btn" class="fsociety-btn" style="padding: 5px 15px; font-size: 1.2rem;">▶ PLAY MUSIC</button>
+        <button id="stop-btn" class="fsociety-btn" style="padding: 5px 15px; font-size: 1.2rem;">⏹ STOP</button>
+        <input type="range" id="volume-slider" min="0" max="100" value="50" style="width: 80px;">
+    </div>
+
+    <div class="scanlines"></div>
+    <div class="vignette"></div>
+
+
+
+
+
+    <!-- MAIN MENU -->
+    <div id="view-main" class="view active" style="justify-content: flex-end; padding-bottom: 8vh;">
+        <div class="terminal" id="terminal-main" style="margin-bottom: 2rem; text-align: center; max-width: 800px; font-size: 1.5rem; color: #ccc;">
+            <span id="typed-text-main"></span><span class="cursor"></span>
+        </div>
+        <h1 class="glitch" data-text="SELECT PROTOCOL" style="margin-bottom: 3rem; font-size: 5rem;">SELECT PROTOCOL</h1>
+        <div class="buttons-container" style="flex-direction: column; gap: 30px; width: 300px;">
+            <button onclick="switchView('view-5of2')" class="fsociety-btn" style="font-size: 2rem; padding: 15px;">5OF2 SYSTEM</button>
+            <button onclick="switchView('view-vip')" class="fsociety-btn scary-btn">VIP SECTOR</button>
+        </div>
+    </div>
+
+    <!-- 5OF2 VIEW -->
+    <div id="view-5of2" class="view">
+        <button onclick="switchView('view-main')" class="back-btn">< RETURN</button>
+        
+        <div class="pentagram-wrapper">
+            <svg class="pentagram" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <!-- Outer circle -->
+                <circle cx="50" cy="50" r="48" stroke="#ccc" stroke-width="2" fill="none"/>
+                <!-- Inner circle -->
+                <circle cx="50" cy="50" r="43" stroke="#ccc" stroke-width="1" fill="none" opacity="0.6"/>
+                <!-- Star points -->
+                <polygon points="50,5 79,94 4,38 96,38 21,94" stroke="#ccc" stroke-width="2" fill="rgba(200,200,200,0.15)"/>
+            </svg>
+        </div>
+
+        <div class="glitch-wrapper">
+            <h1 class="glitch" data-text="5OF2">5OF2</h1>
+        </div>
+        <div class="terminal" id="terminal-5of2">
+            <span id="typed-text-5of2"></span><span class="cursor"></span>
+        </div>
+        
+
+        
+        <div class="vip-boxes-container">
+            <div class="hacker-box skills-box-vip">
+                <div class="box-badge">EXP</div>
+                <div class="box-title">SKILLS</div>
+                <div class="box-content">
+                    <p>CCNA</p>
+                    <p>IoT & Robotics</p>
+                    <p>Arduino C/C++</p>
+                    <p>C# و .NET</p>
+                    <p>Javascript</p>
+                    <p>Cybersecurity</p>
+                    <p>Linux Admin</p>
+                    <p>Embedded Sys</p>
+                </div>
+            </div>
+
+            <a href="https://www.youtube.com/@5of2offn2t" target="_blank" class="hacker-box">
+                <div class="box-badge">YT</div>
+                <div class="box-title">YouTube</div>
+                <div class="box-sub">@5of2offn2t</div>
+            </a>
+
+            <a href="https://www.instagram.com/0x0ilz" target="_blank" class="hacker-box">
+                <div class="box-badge">IG</div>
+                <div class="box-title">Instagram</div>
+                <div class="box-sub">@0x0ilz</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- VIP VIEW -->
+    <div id="view-vip" class="view">
+        <button onclick="switchView('view-main')" class="back-btn">< RETURN</button>
+        
+        <div class="pentagram-wrapper">
+            <svg class="pentagram" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <!-- Outer circle -->
+                <circle cx="50" cy="50" r="48" stroke="#ccc" stroke-width="2" fill="none"/>
+                <!-- Inner circle -->
+                <circle cx="50" cy="50" r="43" stroke="#ccc" stroke-width="1" fill="none" opacity="0.6"/>
+                <!-- Star points -->
+                <polygon points="50,5 79,94 4,38 96,38 21,94" stroke="#ccc" stroke-width="2" fill="rgba(200,200,200,0.15)"/>
+            </svg>
+        </div>
+        
+        <h1 class="glitch vip-title" data-text="V I P">V I P</h1>
+        
+        <div class="terminal vip-terminal" id="terminal-vip">
+            <span id="typed-text-vip"></span><span class="cursor"></span>
+        </div>
+        
+        <div class="vip-boxes-container">
+            <div class="hacker-box skills-box-vip">
+                <div class="box-badge">VIP</div>
+                <div class="box-title">SKILLS</div>
+                <div class="box-content">
+                    <p>CCNA</p>
+                    <p>Arduino C/C++</p>
+                    <p>Javascript</p>
+                    <p>Cybersecurity</p>
+                    <p>Linux Admin</p>
+                </div>
+            </div>
+
+            <a href="https://www.instagram.com/k7vsi" target="_blank" class="hacker-box">
+                <div class="box-badge">IG</div>
+                <div class="box-title">Instagram</div>
+                <div class="box-sub">@k7vsi</div>
+            </a>
+
+            <a href="https://steamcommunity.com/profiles/76561198725835874/" target="_blank" class="hacker-box">
+                <div class="box-badge">ST</div>
+                <div class="box-title">Steam</div>
+                <div class="box-sub">Profile</div>
+            </a>
+
+            <a href="https://github.com/k7si" target="_blank" class="hacker-box">
+                <div class="box-badge">GH</div>
+                <div class="box-title">GitHub</div>
+                <div class="box-sub">@k7si</div>
+            </a>
+
+            <a href="https://www.youtube.com/@K7si" target="_blank" class="hacker-box">
+                <div class="box-badge">YT</div>
+                <div class="box-title">YouTube</div>
+                <div class="box-sub">@K7si</div>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const msgMain = [
+            "Querying Philosophy Database: FRIENDSHIP & SACRIFICE",
+            '"Are you a slave? Then you cannot be a friend." - F. Nietzsche',
+            '"Are you a tyrant? Then you cannot have friends." - F. Nietzsche',
+            '"He who has a why to live for can bear almost any how." - F. Nietzsche'
+        ];
+
+        const msg5of2 = [
+            "Initializing connection to remote server...",
+            "Bypassing security protocols...",
+            "Accessing mainframe... [SUCCESS]",
+            "Injecting payload 5OF2.exe...",
+            "Hello, friend.",
+            "Are you a one or a zero?",
+            "We are fsociety.",
+            "Welcome back, 5OF2."
+        ];
+
+        const msgVIP = [
+            "WARNING: UNAUTHORIZED ACCESS DETECTED...",
+            "Tracing connection...",
+            "Trace failed. IP masked. Proxy active.",
+            "Analyzing biometric data... MATCH FOUND.",
+            "Granting VIP Privileges...",
+            "The devil is in the details.",
+            "Welcome to the dark side.",
+            "Enjoy your stay, VIP."
+        ];
+
+        let typeTimeouts = [];
+
+        function clearTyping() {
+            typeTimeouts.forEach(t => clearTimeout(t));
+            typeTimeouts = [];
+            if(document.getElementById('typed-text-main')) document.getElementById('typed-text-main').innerHTML = '';
+            document.getElementById('typed-text-5of2').innerHTML = '';
+            document.getElementById('typed-text-vip').innerHTML = '';
+        }
+
+        function typeWriter(elementId, messagesArray, msgIndex, charIndex) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+
+            if (msgIndex < messagesArray.length) {
+                if (charIndex < messagesArray[msgIndex].length) {
+                    el.appendChild(document.createTextNode(messagesArray[msgIndex].charAt(charIndex)));
+                    charIndex++;
+                    let t = setTimeout(() => typeWriter(elementId, messagesArray, msgIndex, charIndex), Math.random() * 40 + 20);
+                    typeTimeouts.push(t);
+                } else {
+                    el.appendChild(document.createElement('br'));
+                    el.appendChild(document.createElement('br'));
+                    msgIndex++;
+                    charIndex = 0;
+                    let t = setTimeout(() => typeWriter(elementId, messagesArray, msgIndex, charIndex), 800);
+                    typeTimeouts.push(t);
+                }
+            } else {
+                // Keep cursor blinking at the end
+                let activeCursor = document.querySelector('.active .cursor');
+                if(activeCursor) activeCursor.style.animation = 'blink 1s step-end infinite';
+            }
+        }
+
+        function switchView(viewId) {
+            // Hide all views
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            // Show target view
+            document.getElementById(viewId).classList.add('active');
+            
+            // Handle body classes for VIP colors/background
+            if(viewId === 'view-vip') {
+                document.body.classList.add('vip-active');
+                document.body.classList.remove('active-5of2');
+            } else if (viewId === 'view-5of2') {
+                document.body.classList.add('active-5of2');
+                document.body.classList.remove('vip-active');
+            } else {
+                document.body.classList.remove('vip-active', 'active-5of2');
+            }
+            
+            // Restart typing effect for the active view
+            clearTyping();
+            
+            if(viewId === 'view-5of2') {
+                typeTimeouts.push(setTimeout(() => typeWriter('typed-text-5of2', msg5of2, 0, 0), 500));
+            } else if(viewId === 'view-vip') {
+                typeTimeouts.push(setTimeout(() => typeWriter('typed-text-vip', msgVIP, 0, 0), 500));
+            } else if(viewId === 'view-main') {
+                typeTimeouts.push(setTimeout(() => typeWriter('typed-text-main', msgMain, 0, 0), 500));
+            }
+        }
+
+
+
+
+        // --- Local HTML5 Audio & Visualizer Atmosphere ---
+        var bgAudio = document.getElementById('bg-audio');
+        bgAudio.volume = 0.5;
+
+        // Setup Canvas
+        var canvas = document.createElement('canvas');
+        canvas.id = 'visualizer';
+        canvas.style.position = 'fixed';
+        canvas.style.top = '0';
+        canvas.style.left = '0';
+        canvas.style.width = '100vw';
+        canvas.style.height = '100vh';
+        canvas.style.zIndex = '5';
+        canvas.style.pointerEvents = 'none';
+        canvas.style.opacity = '0.5';
+        document.body.insertBefore(canvas, document.querySelector('.scanlines'));
+
+        var ctx = canvas.getContext('2d');
+        var isAnimating = false;
+        var bufferLength = 64;
+        var dataArray = new Float32Array(bufferLength);
+        var targetArray = new Float32Array(bufferLength);
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Setup Particles
+        var particles = [];
+        for(let i=0; i<100; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 2 + 0.5,
+                speedY: Math.random() * 1.5 + 0.5,
+                speedX: (Math.random() - 0.5) * 0.5,
+                opacity: Math.random() * 0.8
+            });
+        }
+
+        function initVisualizer() {
+            if (!isAnimating) {
+                isAnimating = true;
+                drawVisualizer();
+            }
+        }
+
+        function drawVisualizer() {
+            if(!isAnimating) return;
+            requestAnimationFrame(drawVisualizer);
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            var isVip = document.body.classList.contains('vip-active');
+
+            // Draw floating particles
+            particles.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fillStyle = isVip ? `rgba(200, 200, 200, ${p.opacity})` : `rgba(200, 200, 200, ${p.opacity})`;
+                ctx.fill();
+                p.y -= p.speedY;
+                p.x += p.speedX;
+                if (p.y < 0) {
+                    p.y = canvas.height;
+                    p.x = Math.random() * canvas.width;
+                }
+            });
+
+            // Fake Audio Visualizer
+            var barWidth = (canvas.width / bufferLength);
+            var barHeight;
+            var x = 0;
+
+            for(var i = 0; i < bufferLength; i++) {
+                if (Math.random() > 0.85) {
+                    targetArray[i] = Math.random() * 150 + 20;
+                } else {
+                    targetArray[i] = Math.max(0, targetArray[i] - 3);
+                }
+                
+                dataArray[i] += (targetArray[i] - dataArray[i]) * 0.15; // Smooth transition
+                barHeight = dataArray[i];
+
+                var colorAlpha = Math.min(barHeight / 150, 1);
+                ctx.fillStyle = isVip ? `rgba(200, 200, 200, ${colorAlpha * 0.8})` : `rgba(200, 200, 200, ${colorAlpha * 0.8})`;
+                ctx.fillRect(x, canvas.height - barHeight, barWidth - 2, barHeight);
+                x += barWidth;
+            }
+        }
+        window.addEventListener('load', function() {
+            if(document.getElementById('view-main').classList.contains('active')) {
+                typeTimeouts.push(setTimeout(() => typeWriter('typed-text-main', msgMain, 0, 0), 500));
+            }
+        });
+
+        document.getElementById('play-btn').addEventListener('click', function() {
+            bgAudio.play();
+            initVisualizer();
+            this.style.color = '#fff';
+            this.style.textShadow = '0 0 10px #fff';
+            document.getElementById('stop-btn').style.color = '';
+            document.getElementById('stop-btn').style.textShadow = '';
+        });
+
+        document.getElementById('stop-btn').addEventListener('click', function() {
+            bgAudio.pause();
+            bgAudio.currentTime = 0;
+            isAnimating = false;
+            setTimeout(() => ctx.clearRect(0, 0, canvas.width, canvas.height), 100);
+            this.style.color = '#fff';
+            this.style.textShadow = '0 0 10px #fff';
+            document.getElementById('play-btn').style.color = '';
+            document.getElementById('play-btn').style.textShadow = '';
+        });
+
+        document.getElementById('volume-slider').addEventListener('input', function() {
+            bgAudio.volume = this.value / 100;
+        });
+
+        // --- Process Tattoo Image ---
+        const tattooImg = document.querySelector('.guts-tattoo');
+        if (tattooImg) {
+            const tempImg = new Image();
+            tempImg.crossOrigin = "Anonymous";
+            tempImg.src = 'tattoo.jpg';
+            tempImg.onload = function() {
+                const canvas = document.createElement('canvas');
+                canvas.width = tempImg.width;
+                canvas.height = tempImg.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(tempImg, 0, 0);
+                const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imgData.data;
+                for(let i=0; i<data.length; i+=4) {
+                    const r = data[i];
+                    const g = data[i+1];
+                    const b = data[i+2];
+                    const avg = (r+g+b)/3;
+                    if(avg > 150) {
+                        data[i+3] = 0; // Make white transparent
+                    } else {
+                        // Make black symbol white
+                        data[i] = 255;
+                        data[i+1] = 255;
+                        data[i+2] = 255;
+                        data[i+3] = 255;
+                    }
+                }
+                ctx.putImageData(imgData, 0, 0);
+                tattooImg.src = canvas.toDataURL();
+            };
+        }
+    </script>
+</body>
+</html>
